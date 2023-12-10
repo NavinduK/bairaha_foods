@@ -18,6 +18,9 @@ enum Types {
   LOGOUT = 'LOGOUT',
 }
 
+const l_email = process.env.NEXT_PUBLIC_LOGIN_EMAIL
+const l_pwd = process.env.NEXT_PUBLIC_LOGIN_PWD
+
 type Payload = {
   [Types.INITIAL]: {
     isAuthenticated: boolean
@@ -167,7 +170,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // }
 
     // Using until Auth Implementation
-    if (email == 'admin@bairahafood.lk' && password == 'Ameng@143') {
+    if (email == l_email && password == l_pwd) {
       const response = await axios.post(
         'https://api-dev-minimal-v4.vercel.app/api/account/login',
         {
@@ -175,7 +178,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
           password: 'demo1234',
         }
       )
-      console.log(response)
 
       if (response.data) {
         const { accessToken } = response.data
@@ -186,7 +188,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             id: 1,
             firstName: 'Bairaha',
             lastName: 'Admin',
-            email: 'admin@bairahafood.lk',
+            email: 'email@demo.lk',
             mobileNumber: '0711234567',
             avatarLink: null,
             status: 'ACTIVE',
