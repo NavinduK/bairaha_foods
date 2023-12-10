@@ -90,6 +90,22 @@ const BookingList = () => {
       if (machinelogs && machinelogs.length) {
         const wb = XLSX.utils.book_new()
         const ws = XLSX.utils.table_to_sheet(containerToPrint)
+        // Extract durations from the rows
+        const durationArray = machinelogs.map((row: any) => {
+          return calculateDuration(
+            new Date(row.log.broken.createdAt),
+            new Date(row.log.active.createdAt)
+          )
+        })
+        // Calculate total breakdown duration
+        const totalDuration = calculateTotalDuration(durationArray)
+        // Add a new row at the bottom
+        XLSX.utils.sheet_add_aoa(
+          ws,
+          [['', '', '', '', 'Total', totalDuration]],
+          { origin: -1 }
+        )
+
         XLSX.utils.book_append_sheet(
           wb,
           ws,
@@ -153,6 +169,62 @@ const BookingList = () => {
 
     return formattedDuration || '0 seconds'
   }
+
+  // Function to calculate total duration from an array of duration strings
+  function calculateTotalDuration(durationArray: string[]): string {
+    // Convert each duration string to a numeric value and sum them
+    const totalNumericDuration = durationArray.reduce(
+      (total, durationString) => {
+        const numericDuration = parseDurationToNumeric(durationString)
+        return total + numericDuration
+      },
+      0
+    )
+
+    // Format the total numeric duration back to a string
+    const totalFormattedDuration = formatNumericDurationInMinutes(totalNumericDuration)
+
+    return totalFormattedDuration
+  }
+
+  // Function to parse a duration string to a numeric value (in seconds)
+  function parseDurationToNumeric(durationString: string): number {
+    const parts = durationString
+      .split(':')
+      .map((part) => part.trim().toLowerCase())
+    let totalMins = 0
+
+    for (const part of parts) {
+      const value = parseInt(part, 10)
+      if (part.includes('day')) {
+        totalMins += value * 24 * 60 
+      } else if (part.includes('hour')) {
+        totalMins += value * 60 
+      } else if (part.includes('min')) {
+        totalMins += value 
+      }
+    }
+
+    return totalMins
+  }
+
+  // Function to format a numeric duration (in seconds) to a string
+  function formatNumericDurationInMinutes(numericDuration: number): string {
+    const days = Math.floor(numericDuration / (24 * 60));
+    const hours = Math.floor((numericDuration % (24 * 60)) / 60);
+    const minutes = Math.floor(numericDuration % 60);
+  
+    const formattedDays = days > 0 ? `${days} day${days > 1 ? 's' : ''}` : '';
+    const formattedHours = hours > 0 ? `${hours} hour${hours > 1 ? 's' : ''}` : '';
+    const formattedMinutes = minutes > 0 ? `${minutes} min${minutes > 1 ? 's' : ''}` : '';
+  
+    const formattedDuration = [formattedDays, formattedHours, formattedMinutes]
+      .filter(Boolean)
+      .join(' : ');
+  
+    return formattedDuration || '0 minutes';
+  }
+  
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
