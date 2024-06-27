@@ -171,41 +171,60 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     // Using until Auth Implementation
     if (email == l_email && password == l_pwd) {
-      const response = await axios.post(
-        'https://api-dev-minimal-v4.vercel.app/api/account/login',
-        {
-          email: 'demo@minimals.cc',
-          password: 'demo1234',
-        }
-      )
-
-      if (response.data) {
-        const { accessToken } = response.data
-        setSession(accessToken)
-        const decodedJWT = jwtDecode(accessToken)
-        if (decodedJWT) {
-          const user = {
+      // const response = await axios.post(
+      //   'https://api-dev-minimal-v4.vercel.app/api/account/login',
+      //   {
+      //     email: 'demo@minimals.cc',
+      //     password: 'demo1234',
+      //   }
+      // )
+       const user = {
+          id: 1,
+          firstName: 'Bairaha',
+          lastName: 'Admin',
+          email: 'email@demo.lk',
+          mobileNumber: '0711234567',
+          avatarLink: null,
+          status: 'ACTIVE',
+          role: {
             id: 1,
-            firstName: 'Bairaha',
-            lastName: 'Admin',
-            email: 'email@demo.lk',
-            mobileNumber: '0711234567',
-            avatarLink: null,
+            name: 'SUPER_ADMIN',
             status: 'ACTIVE',
-            role: {
-              id: 1,
-              name: 'SUPER_ADMIN',
-              status: 'ACTIVE',
-            },
-          }
-          dispatch({
-            type: Types.LOGIN,
-            payload: {
-              user,
-            },
-          })
+          },
         }
-      }
+        dispatch({
+          type: Types.LOGIN,
+          payload: {
+            user,
+          },
+        })
+      // if (response.data) {
+      //   const { accessToken } = response.data
+      //   setSession(accessToken)
+      //   const decodedJWT = jwtDecode(accessToken)
+      //   if (decodedJWT) {
+      //     const user = {
+      //       id: 1,
+      //       firstName: 'Bairaha',
+      //       lastName: 'Admin',
+      //       email: 'email@demo.lk',
+      //       mobileNumber: '0711234567',
+      //       avatarLink: null,
+      //       status: 'ACTIVE',
+      //       role: {
+      //         id: 1,
+      //         name: 'SUPER_ADMIN',
+      //         status: 'ACTIVE',
+      //       },
+      //     }
+      //     dispatch({
+      //       type: Types.LOGIN,
+      //       payload: {
+      //         user,
+      //       },
+      //     })
+      //   }
+      // }
     }
   }
 
