@@ -199,8 +199,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           },
         })
       // if (response.data) {
-        const { accessToken } = user
-        setSession(accessToken)
+        // const { accessToken } = user
+        setSession(user)
       //   const decodedJWT = jwtDecode(accessToken)
       //   if (decodedJWT) {
       //     const user = {
