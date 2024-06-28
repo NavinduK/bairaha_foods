@@ -90,8 +90,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken =
-        typeof window !== 'undefined' ? localStorage.getItem('accessToken') : ''
+       const accessToken =
+         typeof window !== 'undefined' ? localStorage.getItem('accessToken') : ''
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken)
 
@@ -199,8 +199,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           },
         })
       // if (response.data) {
-      //   const { accessToken } = response.data
-      //   setSession(accessToken)
+        const { accessToken } = user
+        setSession(accessToken)
       //   const decodedJWT = jwtDecode(accessToken)
       //   if (decodedJWT) {
       //     const user = {
